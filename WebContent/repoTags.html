@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2019 Uppsala University Library
+  ~
+  ~ This file is part of Firday.
+  ~
+  ~     Cora is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Cora is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Friday.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+<head>
+<meta charset="UTF-8"></meta>
+<title>Repository tags</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://rawgit.com/hippich/bower-semver/master/semver.min.js"></script>
+<script type="text/javascript" src="script/repoTagsToken.js"></script>
+<script type="text/javascript" src="script/repoTags.js"></script>
+
+<script type="text/javascript">
+	window.onload = start;
+
+	var gitHubPath = 'lsu-ub-uu/'; 
+	var url = 'https://api.github.com/repos/' + gitHubPath + '/tags';
+
+</script>
+</head>
+<body id="body">
+	<h1>Project tags</h1>
+	<p>
+		Latest tag: <span id="result"></span>
+	</p>
+</body>
+</html>
+
