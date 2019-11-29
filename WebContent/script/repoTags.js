@@ -29,6 +29,8 @@ function start() {
 
 	getVersionForRepository("cora-parent");
 	getVersionForRepository("cora-fitnesse");
+	setTimeout(start, 600);
+	
 }
 function onlyNumber(name) {
 	let onlyNumber = name.substring(name.lastIndexOf("-") + 1, name.length);
