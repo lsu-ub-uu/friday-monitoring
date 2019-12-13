@@ -29,46 +29,57 @@ function start() {
 
 	getVersionForRepository("cora-parent");
 	getVersionForRepository("cora-fitnesse");
-	
+
 }
 function onlyNumber(name) {
-	let onlyNumber = name.substring(name.lastIndexOf("-") + 1, name.length);
-	if(isNaN(onlyNumber)){
-		return "0.0.1";
-	}
-	return onlyNumber;
+	return name.substring(name.lastIndexOf("-") + 1, name.length);
+}
+function onlyText(name) {
+	return name.substring(0, name.lastIndexOf("-"));
 }
 function getUrlForRepository(repo) {
 	return 'https://api.github.com/repos/' + 'lsu-ub-uu/' + repo + '/tags';
 }
 function getVersionForRepository(repo) {
-	try {
+	let projectList = document.getElementById("projectList");
+	var url = getUrlForRepository(repo);
+	$.get(url).done(function(data) {
+		try {
+			let versions = data.sort(function(v1, v2) {
+				let v1Name = onlyNumber(v1.name);
+				let v2Name = onlyNumber(v2.name);
 
-		var url = getUrlForRepository(repo);
-		$.get(url).done(function(data) {
-			try {
-				let versions = data.sort(function(v1, v2) {
-					let v1Name = onlyNumber(v1.name);
-					let v2Name = onlyNumber(v2.name);
-					
-					return semver.compare(v2Name, v1Name)
-				});
-				$('#result').html(versions[0].name);
-				let div = document.createElement("div");
-				div.className = "project";
-				div.innerHTML = versions[0].name;
-				body.appendChild(div);
-			} catch (e) {
-				console.log(e);
-				let div = document.createElement("div");
-				div.innerHTML = repo + " LATEST VERSION NOT FOUND!";
-				body.appendChild(div);
-			}
-		});
-	} catch (e) {
-		console.log(" LATEST VERSION NOT FOUND!");
-		var div = document.createElement("div");
-		div.innerHTML = repo + " LATEST VERSION NOT FOUND!";
-		body.appendChild(div);
-	}
+				return semver.compare(v2Name, v1Name)
+			});
+			$('#result').html(versions[0].name);
+
+			let versionText = onlyText(versions[0].name);
+			let versionNumber = onlyNumber(versions[0].name);
+			let li = createLi(versionText, versionNumber);
+			projectList.appendChild(li);
+		} catch (e) {
+			console.log(e);
+			
+			let li = createLi(repo, "NOT FOUND!");
+			li.className = li.className + " noVersion";
+			projectList.appendChild(li);
+		}
+	});
+}
+function createLi(versionText, versionNumber) {
+//	let versionText = onlyText(name);
+//	let versionNumber = onlyNumber(name);
+
+	let li = document.createElement("li");
+	li.className = "project";
+
+	let header = document.createElement("h2");
+	li.appendChild(header);
+	header.innerText = versionText;
+
+	let div = document.createElement("div");
+	li.appendChild(div);
+	div.className = "version";
+	div.innerText = versionNumber;
+	return li;
 }
