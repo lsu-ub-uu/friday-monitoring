@@ -1,10 +1,16 @@
 .body {
 	display: grid;
+	background-color: #F7F2F3;
+	font-family: arial;
+}
+
+h1 {
+	color: #2A7473;
 }
 
 h2 {
-	background-color: #33ac46;
-	color: #fff;
+	background-color: #8BC8B5;
+	color: #F7F2F3;
 	text-align: center;
 	margin: 0;
 	padding: 0.2rem;
@@ -20,7 +26,7 @@ h2 {
 }
 
 .projectList li {
-	border: 1px solid #33ac46;
+	border: 1px solid #b5b5b5;
 	border-radius: 5px;
 	display: flex;
 	flex-direction: column;
@@ -30,5 +36,15 @@ h2 {
 	padding: 0.4rem;
 }
 .noVersion h2 {
-	background-color: red;
+	background-color: #EA931E;
 }
+
+.updatedToday h2{
+	background-color: #1E5D5B;
+}
+
+.updatedYesterday h2{
+	background-color: #2A7473;
+}
+
+
