@@ -16,4 +16,4 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Friday.  If not, see <http://www.gnu.org/licenses/>.
  */
-var repoToken = "token someGithubToken";
+var repoToken = "token yourToken";
