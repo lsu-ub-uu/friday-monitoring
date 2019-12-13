@@ -78,7 +78,7 @@ function getVersionForRepository(repo) {
 		} catch (e) {
 			console.log(e);
 
-			let li = createLi(repo.name, "NOT FOUND!");
+			let li = createLi(repo.name, "-");
 			li.className = li.className + " noVersion";
 			projectList.appendChild(li);
 		}
