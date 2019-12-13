@@ -17,6 +17,12 @@
  *     along with Friday.  If not, see <http://www.gnu.org/licenses/>.
  */
 function start() {
+	getRepos();
+	setInterval(getRepos, 30 * 60 * 1000);
+}
+function getRepos() {
+	let projectList = document.getElementById("projectList");
+	projectList.innerHTML = '';
 	$.ajaxSetup({
 		headers: {
 			'Authorization': repoToken
@@ -40,6 +46,13 @@ function sortAndDisplayRepos(repos) {
 function onlyNumber(name) {
 	return name.substring(name.lastIndexOf("-") + 1, name.length);
 }
+function onlyNumberFakeIfNotANumber(name) {
+	let number = onlyNumber(name);
+	if (isNaN(number)) {
+		return '0.0.1';
+	}
+	return number;
+}
 function onlyText(name) {
 	return name.substring(0, name.lastIndexOf("-"));
 }
@@ -50,8 +63,8 @@ function getVersionForRepository(repo) {
 	$.get(url).done(function(data) {
 		try {
 			let versions = data.sort(function(v1, v2) {
-				let v1Name = onlyNumber(v1.name);
-				let v2Name = onlyNumber(v2.name);
+				let v1Name = onlyNumberFakeIfNotANumber(v1.name);
+				let v2Name = onlyNumberFakeIfNotANumber(v2.name);
 
 				return semver.compare(v2Name, v1Name)
 			});
