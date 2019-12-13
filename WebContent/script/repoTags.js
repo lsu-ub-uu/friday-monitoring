@@ -23,12 +23,18 @@ function start() {
 		}
 	});
 	var repoUrl = "https://api.github.com/orgs/lsu-ub-uu/repos?per_page=500";
-	$.get(repoUrl).done(function(data) {
-		data.forEach((repo) => getVersionForRepository(repo.name));
+	$.get(repoUrl).done(function(repos) {
+		sortAndDisplayRepos(repos);
 	});
-
-	getVersionForRepository("cora-parent");
-	getVersionForRepository("cora-fitnesse");
+}
+function sortAndDisplayRepos(repos) {
+	//	console.log(repos)
+	//	console.log(repos.length);
+	//	repos.forEach(console.log(element));
+	repos.forEach(function(repo2) {
+		console.log(repo2);
+		getVersionForRepository(repo2);
+	});
 
 }
 function onlyNumber(name) {
@@ -37,12 +43,10 @@ function onlyNumber(name) {
 function onlyText(name) {
 	return name.substring(0, name.lastIndexOf("-"));
 }
-function getUrlForRepository(repo) {
-	return 'https://api.github.com/repos/' + 'lsu-ub-uu/' + repo + '/tags';
-}
 function getVersionForRepository(repo) {
 	let projectList = document.getElementById("projectList");
-	var url = getUrlForRepository(repo);
+	let url = repo.tags_url;
+	console.log(url)
 	$.get(url).done(function(data) {
 		try {
 			let versions = data.sort(function(v1, v2) {
@@ -51,6 +55,7 @@ function getVersionForRepository(repo) {
 
 				return semver.compare(v2Name, v1Name)
 			});
+			console.log(versions[0]);
 			$('#result').html(versions[0].name);
 
 			let versionText = onlyText(versions[0].name);
@@ -59,17 +64,14 @@ function getVersionForRepository(repo) {
 			projectList.appendChild(li);
 		} catch (e) {
 			console.log(e);
-			
-			let li = createLi(repo, "NOT FOUND!");
+
+			let li = createLi(repo.name, "NOT FOUND!");
 			li.className = li.className + " noVersion";
 			projectList.appendChild(li);
 		}
 	});
 }
 function createLi(versionText, versionNumber) {
-//	let versionText = onlyText(name);
-//	let versionNumber = onlyNumber(name);
-
 	let li = document.createElement("li");
 	li.className = "project";
 
