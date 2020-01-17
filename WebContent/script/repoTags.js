@@ -84,7 +84,7 @@ function getVersionForRepository(repo) {
 				let commitedDays = countDaysFromCommit(data2.commit.author.date);
 //				div.innerText = commitedDays;
 				
-				if (commitedDays == 0){
+				if (commitedDays < 1){
 					li.className = li.className + " updatedToday";
 				}
 				else if (commitedDays < 5){
