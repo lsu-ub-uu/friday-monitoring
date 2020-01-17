@@ -68,12 +68,31 @@ function getVersionForRepository(repo) {
 
 				return semver.compare(v2Name, v1Name)
 			});
-			console.log(versions[0]);
-			$('#result').html(versions[0].name);
+			let latestVersion = versions[0];
+			console.log(latestVersion);
+			$('#result').html(latestVersion.name);
 
-			let versionText = onlyText(versions[0].name);
-			let versionNumber = onlyNumber(versions[0].name);
+			let versionText = onlyText(latestVersion.name);
+			let versionNumber = onlyNumber(latestVersion.name);
+			let commitUrl = latestVersion.commit.url;
 			let li = createLi(versionText, versionNumber);
+			$.get(commitUrl).done(function(data2) {
+				
+				let div = document.createElement("div");
+				li.appendChild(div);
+				div.className = "commitDate";
+				let commitedDays = countDaysFromCommit(data2.commit.author.date);
+				div.innerText = commitedDays;
+				
+				if (commitedDays == 0){
+					li.className = li.className + " updatedToday";
+				}
+				else if (commitedDays < 5){
+					li.className = li.className + " updatedYesterday";
+				}
+				
+			});
+			
 			projectList.appendChild(li);
 		} catch (e) {
 			console.log(e);
@@ -97,4 +116,30 @@ function createLi(versionText, versionNumber) {
 	div.className = "version";
 	div.innerText = versionNumber;
 	return li;
+}
+
+function countDaysFromCommit(commitDateString ) {
+	console.log("CommitDate " + commitDateString);
+	let commitDate = new Date(commitDateString);
+	console.log(Date.now()-commitDate);
+	return dhm(Date.now()-commitDate);
+}
+
+function dhm(t){
+    var cd = 24 * 60 * 60 * 1000,
+        ch = 60 * 60 * 1000,
+        d = Math.floor(t / cd),
+        h = Math.floor( (t - d * cd) / ch),
+        m = Math.round( (t - d * cd - h * ch) / 60000),
+        pad = function(n){ return n < 10 ? '0' + n : n; };
+  if( m === 60 ){
+    h++;
+    m = 0;
+  }
+  if( h === 24 ){
+    d++;
+    h = 0;
+  }
+//  return [d, pad(h), pad(m)].join(':');
+  return d;
 }
