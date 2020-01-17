@@ -9,7 +9,7 @@ h1 {
 }
 
 h2 {
-	background-color: #8BC8B5;
+	background-color: #729fcf;
 	color: #F7F2F3;
 	text-align: center;
 	margin: 0;
@@ -36,15 +36,19 @@ h2 {
 	padding: 0.4rem;
 }
 .noVersion h2 {
-	background-color: #EA931E;
+	background-color: #888a85;
 }
 
 .updatedToday h2{
-	background-color: #1E5D5B;
+	background-color: #8ae234;
 }
 
 .updatedYesterday h2{
-	background-color: #2A7473;
+	background-color: #4e9a06;
+}
+
+.commitDate {
+	font-size: 0.7rem;
 }
 
 
