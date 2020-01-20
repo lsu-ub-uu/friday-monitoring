@@ -87,8 +87,14 @@ function getVersionForRepository(repo) {
 				if (commitedDays < 1){
 					li.className = li.className + " updatedToday";
 				}
-				else if (commitedDays < 5){
+				else if (commitedDays < 2){
 					li.className = li.className + " updatedYesterday";
+				}
+				else if (commitedDays < 3){
+					li.className = li.className + " updatedbeforeYesterday";
+				}
+				else if (commitedDays < 7){
+					li.className = li.className + " updatedSevenDaysAgo";
 				}
 				
 			});

@@ -40,13 +40,20 @@ h2 {
 }
 
 .updatedToday h2{
-	background-color: #8ae234;
+	background-color: #196127;
 }
 
 .updatedYesterday h2{
-	background-color: #4e9a06;
+	background-color: #239a3b;
 }
 
+.updatedbeforeYesterday h2{
+	background-color: #7bc96f;
+}
+
+.updatedSevenDaysAgo h2{
+	background-color: #c6e48b;
+}
 .commitDate {
 	font-size: 0.7rem;
 }
