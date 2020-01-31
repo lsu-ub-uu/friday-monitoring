@@ -78,11 +78,11 @@ function getVersionForRepository(repo) {
 			let li = createLi(versionText, versionNumber);
 			$.get(commitUrl).done(function(data2) {
 				
-//				let div = document.createElement("span");
-//				li.appendChild(div);
-//				div.className = "commitDate";
+				let span = document.createElement("span");
+				li.appendChild(span);
+				span.className = "commitDate";
 				let commitedDays = countDaysFromCommit(data2.commit.author.date);
-//				div.innerText = commitedDays;
+				span.innerText = commitedDays;
 				
 				if (commitedDays < 1){
 					li.className = li.className + " updatedToday";

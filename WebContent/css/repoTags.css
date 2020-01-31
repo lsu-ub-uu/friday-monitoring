@@ -1,20 +1,35 @@
+:root {
+    --main-background-color: #18181a; 
+	--box-border-color: #38383d;
+	--h1-color: #878788;
+	--box-title-text-color: #222225;
+	--box-title-color: #74bdfd;
+	--box-title-no-version-color: #878788;
+	--box-title-updated-today-color: #196127;
+	--box-title-updated-yesterday-color: #239a3b;
+	--box-title-updated-before-yesterday-color: #7bc96f;
+	--box-title-updated-seven-days-ago-color: #c6e48b;
+}
+
+
 .body {
 	display: grid;
-	background-color: #F7F2F3;
+	background-color: var(--main-background-color);
 	font-family: helvetica;
 }
 
 h1 {
-	color: #2A7473;
+	color: var(--h1-color);
 }
 
 h2 {
-	background-color: #729fcf;
-	color: #F7F2F3;
+	background-color: var(--box-title-color) ;
+	color: var(--box-title-text-color);
 	text-align: center;
 	margin: 0;
 	padding: 0.2rem;
 	font-size: 1.1rem;
+	border-radius: 10px 10px 0 0;
 }
 
 .projectList {
@@ -26,36 +41,41 @@ h2 {
 }
 
 .projectList li {
-	border: 1px solid #b5b5b5;
-	border-radius: 5px;
+	border: 1px solid var(--box-border-color);
+	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
+	position: relative
 }
 .version {
 	text-align: center;
-	padding: 0.4rem;
+	padding-top: 0.5rem;
+	color: white;
 }
 .noVersion h2 {
-	background-color: #888a85;
+	background-color: var(--box-title-no-version-color);
 }
 
 .updatedToday h2{
-	background-color: #196127;
+	background-color: var(--box-title-updated-today-color);
 }
 
 .updatedYesterday h2{
-	background-color: #239a3b;
+	background-color: var(--box-title-updated-yesterday-color);
 }
 
 .updatedbeforeYesterday h2{
-	background-color: #7bc96f;
+	background-color: var(--box-title-updated-before-yesterday-color);
 }
 
 .updatedSevenDaysAgo h2{
-	background-color: #c6e48b;
+	background-color: var(--box-title-updated-seven-days-ago-color);
 }
+
 .commitDate {
+	color: var(--box-title-text-color);
 	font-size: 0.7rem;
+	position: absolute;
+	top: 7px;
+	left: 5px;
 }
-
-
