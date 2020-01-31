@@ -1,10 +1,9 @@
 :root {
-    --main-background-color: #18181a; 
-	--box-border-color: #38383d;
+  --main-background-color: #18181a; 
 	--h1-color: #878788;
 	--box-title-text-color: #222225;
 	--box-title-color: #74bdfd;
-	--box-background-color: #222225;
+	--box-background-color: #39393c;
 	--box-title-no-version-color: #878788;
 	--box-title-updated-today-color: #196127;
 	--box-title-updated-yesterday-color: #239a3b;
@@ -29,8 +28,9 @@ h2 {
 	text-align: center;
 	margin: 0;
 	padding: 0.2rem;
-	font-size: 1.1rem;
+	font-size: 1rem;
 	border-radius: 10px 10px 0 0;
+	letter-spacing: 2px;
 }
 
 .projectList {
@@ -38,12 +38,11 @@ h2 {
 	margin: 0em;
 	display: grid;
 	grid-gap: 0.6rem 1.9rem;
-	grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
 	padding-left: 0px;
 }
 
 .projectList li {
-	border: 1px solid var(--box-border-color);
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
