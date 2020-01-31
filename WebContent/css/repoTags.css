@@ -4,11 +4,13 @@
 	--h1-color: #878788;
 	--box-title-text-color: #222225;
 	--box-title-color: #74bdfd;
+	--box-background-color: #222225;
 	--box-title-no-version-color: #878788;
 	--box-title-updated-today-color: #196127;
 	--box-title-updated-yesterday-color: #239a3b;
 	--box-title-updated-before-yesterday-color: #7bc96f;
 	--box-title-updated-seven-days-ago-color: #c6e48b;
+	--text-version-color: white;
 }
 
 
@@ -45,12 +47,13 @@ h2 {
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
-	position: relative
+	position: relative;
+	background-color: var(--box-background-color);
 }
 .version {
 	text-align: center;
 	padding-top: 0.5rem;
-	color: white;
+	color: var(--text-version-color);
 }
 .noVersion h2 {
 	background-color: var(--box-title-no-version-color);
