@@ -34,28 +34,20 @@ function getRepos() {
 	});
 }
 function sortAndDisplayRepos(repos) {
-	//	console.log(repos)
+//	console.log(repos.name);
 	//	console.log(repos.length);
 	//	repos.forEach(console.log(element));
-	repos.forEach(function(repo2) {
+	console.log(repos.sort(compareRepos));
+	
+	var reposSorted = repos.sort(compareRepos);
+	
+	reposSorted.forEach(function(repo2) {
 		console.log(repo2);
 		getVersionForRepository(repo2);
 	});
 
 }
-function onlyNumber(name) {
-	return name.substring(name.lastIndexOf("-") + 1, name.length);
-}
-function onlyNumberFakeIfNotANumber(name) {
-	let number = onlyNumber(name);
-	if (isNaN(number)) {
-		return '0.0.1';
-	}
-	return number;
-}
-function onlyText(name) {
-	return name.substring(0, name.lastIndexOf("-"));
-}
+
 function getVersionForRepository(repo) {
 	let projectList = document.getElementById("projectList");
 	let url = repo.tags_url;
@@ -109,6 +101,23 @@ function getVersionForRepository(repo) {
 		}
 	});
 }
+
+function onlyNumberFakeIfNotANumber(name) {
+	let number = onlyNumber(name);
+	if (isNaN(number)) {
+		return '0.0.1';
+	}
+	return number;
+}
+
+function onlyNumber(name) {
+	return name.substring(name.lastIndexOf("-") + 1, name.length);
+}
+
+function onlyText(name) {
+	return name.substring(0, name.lastIndexOf("-"));
+}
+
 function createLi(versionText, versionNumber) {
 	let li = document.createElement("li");
 	li.className = "project";
@@ -148,4 +157,20 @@ function dhm(t){
   }
 //  return [d, pad(h), pad(m)].join(':');
   return d;
+}
+
+const compareRepos = function(a, b){
+	
+	const repoA = a.name.toUpperCase();
+	const repoB = b.name.toUpperCase();
+	
+	let comparison = 0;
+	
+	if (repoA > repoB) {
+		comparison = 1;
+	}
+	else if (repoA < repoB){
+		comparison = -1;
+	}
+	return comparison;
 }
