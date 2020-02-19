@@ -16,7 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Friday.  If not, see <http://www.gnu.org/licenses/>.
  */
-//var repoTags = (function(){
+//var CORA = (function(cora) {
+//	"use strict";
+//	cora.releaseArtifacts = function() {
+
 function init() {
 	getRepos();
 	setInterval(getRepos, 30 * 60 * 1000);
@@ -39,9 +42,9 @@ function sortAndDisplayRepos(repos) {
 	//	console.log(repos.length);
 	//	repos.forEach(console.log(element));
 	console.log(repos.sort(compareRepos));
-	
+
 	var reposSorted = repos.sort(compareRepos);
-	
+
 	reposSorted.forEach(function(repo2) {
 		console.log(repo2);
 		getVersionForRepository(repo2);
@@ -70,28 +73,28 @@ function getVersionForRepository(repo) {
 			let commitUrl = latestVersion.commit.url;
 			let li = createLi(versionText, versionNumber);
 			$.get(commitUrl).done(function(data2) {
-				
+
 				let span = document.createElement("span");
 				li.appendChild(span);
 				span.className = "commitDate";
 				let commitedDays = countDaysFromCommit(data2.commit.author.date);
 				span.innerText = commitedDays;
-				
-				if (commitedDays < 1){
+
+				if (commitedDays < 1) {
 					li.className = li.className + " updatedToday";
 				}
-				else if (commitedDays < 2){
+				else if (commitedDays < 2) {
 					li.className = li.className + " updatedYesterday";
 				}
-				else if (commitedDays < 3){
-					li.className = li.className + " updatedbeforeYesterday";
-				}
-				else if (commitedDays < 7){
+//				else if (commitedDays < 3) {
+//					li.className = li.className + " updatedbeforeYesterday";
+//				}
+				else if (commitedDays < 7) {
 					li.className = li.className + " updatedSevenDaysAgo";
 				}
-				
+
 			});
-			
+
 			projectList.appendChild(li);
 		} catch (e) {
 			console.log(e);
@@ -134,45 +137,50 @@ function createLi(versionText, versionNumber) {
 	return li;
 }
 
-function countDaysFromCommit(commitDateString ) {
+function countDaysFromCommit(commitDateString) {
 	console.log("CommitDate " + commitDateString);
 	let commitDate = new Date(commitDateString);
-	console.log(Date.now()-commitDate);
-	return dhm(Date.now()-commitDate);
+	console.log(Date.now() - commitDate);
+	return dhm(Date.now() - commitDate);
 }
 
-function dhm(t){
-    var cd = 24 * 60 * 60 * 1000,
-        ch = 60 * 60 * 1000,
-        d = Math.floor(t / cd),
-        h = Math.floor( (t - d * cd) / ch),
-        m = Math.round( (t - d * cd - h * ch) / 60000),
-        pad = function(n){ return n < 10 ? '0' + n : n; };
-  if( m === 60 ){
-    h++;
-    m = 0;
-  }
-  if( h === 24 ){
-    d++;
-    h = 0;
-  }
-//  return [d, pad(h), pad(m)].join(':');
-  return d;
+function dhm(t) {
+	var cd = 24 * 60 * 60 * 1000,
+		ch = 60 * 60 * 1000,
+		d = Math.floor(t / cd),
+		h = Math.floor((t - d * cd) / ch),
+		m = Math.round((t - d * cd - h * ch) / 60000),
+		pad = function(n) { return n < 10 ? '0' + n : n; };
+	if (m === 60) {
+		h++;
+		m = 0;
+	}
+	if (h === 24) {
+		d++;
+		h = 0;
+	}
+	//  return [d, pad(h), pad(m)].join(':');
+	return d;
 }
 
-const compareRepos = function(a, b){
-	
+const compareRepos = function(a, b) {
+
 	const repoA = a.name.toUpperCase();
 	const repoB = b.name.toUpperCase();
-	
+
 	let comparison = 0;
-	
+
 	if (repoA > repoB) {
 		comparison = 1;
 	}
-	else if (repoA < repoB){
+	else if (repoA < repoB) {
 		comparison = -1;
 	}
 	return comparison;
 }
-//}(repoTags));
+//		return Object.freeze({
+//			init: init
+//		});
+//	};
+//	return cora;
+//}(CORA));

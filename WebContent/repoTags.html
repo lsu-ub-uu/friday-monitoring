@@ -26,14 +26,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://rawgit.com/hippich/bower-semver/master/semver.min.js"></script>
 <script type="text/javascript" src="script/repoTagsToken.js"></script>
-<script type="text/javascript" src="script/repoTags.js"></script>
+<!-- <script type="text/javascript" src="script/repoTags.js"></script> -->
+<!-- <script type="text/javascript" src="script/releaseArtifactsMain.js"></script> -->
+<script type="text/javascript" src="script/releaseArtifacts.js"></script>
 
 <script type="text/javascript">
-	window.onload = start;
-
-	var gitHubPath = 'lsu-ub-uu/'; 
-	var url = 'https://api.github.com/repos/' + gitHubPath + '/tags';
-
+	window.onload = init;
 </script>
 </head>
 <body id="body" class="body">

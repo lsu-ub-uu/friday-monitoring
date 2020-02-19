@@ -5,9 +5,9 @@
 	--box-title-color: #74bdfd;
 	--box-background-color: #39393c;
 	--box-title-no-version-color: #878788;
-	--box-title-updated-today-color: #196127;
-	--box-title-updated-yesterday-color: #239a3b;
-	--box-title-updated-before-yesterday-color: #7bc96f;
+	--box-title-updated-today-color: #239a3b;
+	--box-title-updated-yesterday-color: #7bc96f;
+/* 	--box-title-updated-before-yesterday-color: #7bc96f; */
 	--box-title-updated-seven-days-ago-color: #c6e48b;
 	--text-version-color: white;
 }
