@@ -22,6 +22,7 @@
 
 function init() {
 	getRepos();
+	//Timer 
 	setInterval(getRepos, 30 * 60 * 1000);
 }
 function getRepos() {
@@ -34,68 +35,64 @@ function getRepos() {
 	});
 	var repoUrl = "https://api.github.com/orgs/lsu-ub-uu/repos?per_page=500";
 	$.get(repoUrl).done(function(repos) {
+		console.log(repos)
 		sortAndDisplayRepos(repos);
 	});
 }
-function sortAndDisplayRepos(repos) {
-	//	console.log(repos.name);
-	//	console.log(repos.length);
-	//	repos.forEach(console.log(element));
-	console.log(repos.sort(compareRepos));
+function sortAndDisplayRepos(originalRepos) {
+	let filteredRepos = filterAwayFromArray(originalRepos, "docker");
+	let reposWithOutDocker = filteredRepos[0];
+	let reposWithOnlyDockers = filteredRepos[1];
+	
+	//SORT
+	reposWithOutDocker.sort(compareRepos);
+	reposWithOnlyDockers.sort(compareRepos);
 
-	var reposSorted = repos.sort(compareRepos);
-
-	reposSorted.forEach(function(repo2) {
-		console.log(repo2);
-		getVersionForRepository(repo2);
-	});
-
+	getVersionsForRepositories(reposWithOutDocker, "projectList");
+	getVersionsForRepositories(reposWithOnlyDockers, "dockerList");
 }
 
-function getVersionForRepository(repo) {
-	let projectList = document.getElementById("projectList");
+function filterAwayFromArray(arrayIn, filterText){
+	let arrayWithFilteredElements = [];
+	let arrayWithOutFilteredElements = [];
+	arrayIn.forEach(function(element, index, array){
+		const name = element.name;
+		if (name.includes(filterText)){
+			console.log(element.name);
+			arrayWithFilteredElements.push(element);
+		}
+		else{
+			arrayWithOutFilteredElements.push(element);
+		}
+	});
+	return [arrayWithOutFilteredElements, arrayWithFilteredElements];
+}
+
+function getVersionsForRepositories(repoList, ulType){
+	repoList.forEach(function(repo) {
+		console.log(repo);
+		getVersionForRepository(repo, ulType);
+	});
+}
+
+function getVersionForRepository(repo, ulType) {
+	let projectList = document.getElementById(ulType);
+	projectList.innerHTML = '';
 	let url = repo.tags_url;
 	console.log(url)
-	$.get(url).done(function(data) {
+	$.get(url).done(function(tags) {
+		
 		try {
-			let versions = data.sort(function(v1, v2) {
-				let v1Name = onlyNumberFakeIfNotANumber(v1.name);
-				let v2Name = onlyNumberFakeIfNotANumber(v2.name);
+			let versions = getVersionTextAndNumber(tags);
 
-				return semver.compare(v2Name, v1Name)
-			});
-			let latestVersion = versions[0];
-			console.log(latestVersion);
-			$('#result').html(latestVersion.name);
-
-			let versionText = onlyText(latestVersion.name);
-			let versionNumber = onlyNumber(latestVersion.name);
-			let commitUrl = latestVersion.commit.url;
+			let versionText = versions[0];
+			let versionNumber = versions[1];
+			let commitUrl = versions[2];
+			
 			let li = createLi(versionText, versionNumber);
-			$.get(commitUrl).done(function(data2) {
-
-				let span = document.createElement("span");
-				li.appendChild(span);
-				span.className = "commitDate";
-				let commitedDays = countDaysFromCommit(data2.commit.author.date);
-				span.innerText = commitedDays;
-
-				if (commitedDays < 1) {
-					li.className = li.className + " updatedToday";
-				}
-				else if (commitedDays < 2) {
-					li.className = li.className + " updatedYesterday";
-				}
-//				else if (commitedDays < 3) {
-//					li.className = li.className + " updatedbeforeYesterday";
-//				}
-				else if (commitedDays < 7) {
-					li.className = li.className + " updatedSevenDaysAgo";
-				}
-
-			});
-
+			getLatestUpdate(commitUrl, li)
 			projectList.appendChild(li);
+			
 		} catch (e) {
 			console.log(e);
 
@@ -104,6 +101,51 @@ function getVersionForRepository(repo) {
 			projectList.appendChild(li);
 		}
 	});
+}
+
+function getLatestUpdate(commitUrl, li){
+	$.get(commitUrl).done(function(data2){
+		paintUpdatedDays(data2, li);
+	});
+}
+
+
+function getVersionTextAndNumber(tags){
+	let versions = sortAndFilterTagVersions(tags);
+	let latestVersion = versions[0];
+	console.log(latestVersion);
+
+	let versionText = onlyText(latestVersion.name);
+	let versionNumber = onlyNumber(latestVersion.name);
+	let commitUrl = latestVersion.commit.url;
+	return [versionText, versionNumber, commitUrl];
+}
+
+function sortAndFilterTagVersions(tags){
+	return tags.sort(function(v1, v2) {
+	let v1Name = onlyNumberFakeIfNotANumber(v1.name);
+	let v2Name = onlyNumberFakeIfNotANumber(v2.name);
+
+	return semver.compare(v2Name, v1Name)
+	});
+}
+
+function paintUpdatedDays(data, li){
+	let span = document.createElement("span");
+	li.appendChild(span);
+	span.className = "commitDate";
+	let commitedDays = countDaysFromCommit(data.commit.author.date);
+	span.innerText = commitedDays;
+
+	if (commitedDays < 1) {
+		li.className = li.className + " updatedToday";
+	}
+	else if (commitedDays < 2) {
+		li.className = li.className + " updatedYesterday";
+	}
+	else if (commitedDays < 7) {
+		li.className = li.className + " updatedSevenDaysAgo";
+	}
 }
 
 function onlyNumberFakeIfNotANumber(name) {
