@@ -226,9 +226,3 @@ const init = function() {
 
 	start();
 };
-//		return Object.freeze({
-//			init: init
-//		});
-//	};
-//	return cora;
-//}(CORA));
