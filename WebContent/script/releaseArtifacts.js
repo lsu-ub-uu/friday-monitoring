@@ -81,7 +81,7 @@ const init = function() {
 
 	const getVersionForRepository = function(repo, ulType) {
 		let projectList = document.getElementById(ulType);
-		//projectList.innerHTML = '';
+		projectList.innerHTML = '';
 		let url = repo.tags_url;
 		console.log(url)
 		$.get(url).done(function(tags) {
