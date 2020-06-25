@@ -62,10 +62,11 @@ const init = function() {
 		arrayIn.forEach(function(element, index, array) {
 			const name = element.name;
 			if (name.includes(filterText)) {
-				console.log(element.name);
+//				console.log("Docker"+element.name);
 				arrayWithFilteredElements.push(element);
 			}
 			else {
+//				console.log("Vanligt"+element.name);
 				arrayWithOutFilteredElements.push(element);
 			}
 		});
@@ -74,7 +75,7 @@ const init = function() {
 
 	const getVersionsForRepositories = function(repoList, ulType) {
 		repoList.forEach(function(repo) {
-			console.log(repo);
+			console.log(repo.name);
 			getVersionForRepository(repo, ulType);
 		});
 	};
@@ -83,13 +84,14 @@ const init = function() {
 		let projectList = document.getElementById(ulType);
 		projectList.innerHTML = '';
 		let url = repo.tags_url;
-		console.log(url)
+//		console.log(url)
 		$.get(url).done(function(tags) {
 
 			try {
 				let versions = getVersionTextAndNumber(tags);
 
 				let versionText = versions[0];
+//				console.log(versionText);
 				let versionNumber = versions[1];
 				let commitUrl = versions[2];
 
@@ -98,7 +100,7 @@ const init = function() {
 				projectList.appendChild(li);
 
 			} catch (e) {
-				console.log(e);
+				console.log(repo.name+" : "+e);
 
 				let li = createLi(repo.name, "-");
 				li.className = li.className + " noVersion";
@@ -116,7 +118,7 @@ const init = function() {
 	const getVersionTextAndNumber = function(tags) {
 		let versions = sortAndFilterTagVersions(tags);
 		let latestVersion = versions[0];
-		console.log(latestVersion);
+//		console.log(latestVersion);
 
 		let versionText = onlyText(latestVersion.name);
 		let versionNumber = onlyNumber(latestVersion.name);
@@ -153,8 +155,17 @@ const init = function() {
 
 	const onlyNumberFakeIfNotANumber = function(name) {
 		let number = onlyNumber(name);
+//		console.log(number);
+//		console.log("Number of: "+name.split("."));
+		
 		if (isNaN(number)) {
 			return '0.0.1';
+		}
+		if (hasVersionWrongFormat(number)){
+//			let newNumber = number+".0";
+//			console.log("NewNumber: "+newNumber);
+			return '0.0.1';
+//			return newNumber;
 		}
 		return number;
 	};
@@ -183,9 +194,9 @@ const init = function() {
 	};
 
 	const countDaysFromCommit = function(commitDateString) {
-		console.log("CommitDate " + commitDateString);
+//		console.log("CommitDate " + commitDateString);
 		let commitDate = new Date(commitDateString);
-		console.log(Date.now() - commitDate);
+//		console.log(Date.now() - commitDate);
 		return dhm(Date.now() - commitDate);
 	};
 
@@ -222,6 +233,14 @@ const init = function() {
 			comparison = -1;
 		}
 		return comparison;
+	};
+	
+	const hasVersionWrongFormat = function(number){
+		if ((number.split(".").length-1) === 1){
+			return true;
+		}else{
+			return false;
+		}
 	};
 
 	start();
