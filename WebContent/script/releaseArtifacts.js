@@ -36,7 +36,7 @@ const init = function() {
 				'Authorization': repoToken
 			}
 		});
-		var repoUrl = "https://api.github.com/orgs/lsu-ub-uu/repos?per_page=500";
+		var repoUrl = "https://api.github.com/orgs/lsu-ub-uu/repos?sort=updated&direction=desc&per_page=100&page=1";
 		$.get(repoUrl).done(function(repos) {
 //			console.log(repos)
 			sortAndDisplayRepos(repos);
