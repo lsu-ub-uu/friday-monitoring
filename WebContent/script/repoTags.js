@@ -18,8 +18,8 @@
  */
 //var repoTags = (function(){
 function init() {
-	getRepos();
-	setInterval(getRepos, 30 * 60 * 1000);
+//	getRepos();
+	setInterval(getRepos, 1;
 }
 function getRepos() {
 	let projectList = document.getElementById("projectList");

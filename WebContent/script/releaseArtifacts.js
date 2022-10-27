@@ -24,16 +24,17 @@ const init = function() {
 
 	let allRepos = [];
 	let noRepoListsAdded = 0;
+	let noOfReturnedRepos = 0;
+	let totalRepos;
+	let artifacts = [];
 
 	const start = function() {
 		getRepos();
 		//Timer 
-		setInterval(getRepos, 30 * 60 * 1000);
+		setInterval(getRepos, 5 * 60 * 1000);
 	};
 
 	const getRepos = function() {
-		let projectList = document.getElementById("projectList");
-		projectList.innerHTML = '';
 		$.ajaxSetup({
 			headers: {
 				'Authorization': repoToken
@@ -55,6 +56,7 @@ const init = function() {
 		if (noRepoListsAdded == 2) {
 			sortAndDisplayRepos(allRepos);
 			noRepoListsAdded = 0;
+			allRepos = new Array(0);
 		}
 	}
 
@@ -74,14 +76,12 @@ const init = function() {
 	const filterAwayFromArray = function(arrayIn, filterText) {
 		let arrayWithFilteredElements = [];
 		let arrayWithOutFilteredElements = [];
-		arrayIn.forEach(function(element, index, array) {
+		arrayIn.forEach(function(element) {
 			const name = element.name;
 			if (name.includes(filterText)) {
-				//				console.log("Docker"+element.name);
 				arrayWithFilteredElements.push(element);
 			}
 			else {
-				//				console.log("Vanligt"+element.name);
 				arrayWithOutFilteredElements.push(element);
 			}
 		});
@@ -89,52 +89,75 @@ const init = function() {
 	};
 
 	const getVersionsForRepositories = function(repoList, ulType) {
-		repoList.forEach(function(repo) {
-			console.log(repo.name);
-			getVersionForRepository(repo, ulType);
-		});
-	};
-
-	const getVersionForRepository = function(repo, ulType) {
 		let projectList = document.getElementById(ulType);
 		projectList.innerHTML = '';
-		let url = repo.tags_url;
-		//		console.log(url)
+
+		totalRepos = repoList.length;
+		repoList.forEach(function(repo) {
+			getVersionForRepository(repo.tags_url);
+		});
+		possiblyCreateInner();
+		
+		//		artifacts.forEach(function(artifact) {
+		//			createInnerHtmlForArtifacts(artifact, projectList);
+		//		});
+	};
+
+	const getVersionForRepository = function(url) {
 		$.get(url).done(function(tags) {
+			let versions = getVersionTextAndNumber(tags);
+			let artifact = {};
+			artifact.versionText = versions[0];
+			artifact.versionNumber = versions[1];
+			artifact.commitUrl = versions[2];
+			artifacts.push(artifact);
+			getLatestUpdate(artifact);
+			noOfReturnedRepos++;
+			possiblyCreateInner(noOfReturnedRepos);	
+		});
+	};
+	
+	const possiblyCreateInner = function(noOfReturned) {
+		if (noOfReturned == totalRepos) {
+			// console.log(artifacts);
+			artifacts.forEach(function(artifact) {
+				console.log(artifact);
+				createInnerHtmlForArtifacts(artifact, projectList);
+			});
+		}
+	};
 
-			try {
-				let versions = getVersionTextAndNumber(tags);
-
-				let versionText = versions[0];
-				//				console.log(versionText);
-				let versionNumber = versions[1];
-				let commitUrl = versions[2];
-
-				let li = createLi(versionText, versionNumber);
-				getLatestUpdate(commitUrl, li)
-				projectList.appendChild(li);
-
-			} catch (e) {
-				console.log(repo.name + " : " + e);
-
-				let li = createLi(repo.name, "-");
-				li.className = li.className + " noVersion";
-				projectList.appendChild(li);
-			}
+	const getLatestUpdate = function(artifact) {
+		$.get(artifact.commitUrl).done(function(data) {
+			artifact.commitedDate = data.commit.author.date;
 		});
 	};
 
-	const getLatestUpdate = function(commitUrl, li) {
-		$.get(commitUrl).done(function(data2) {
-			paintUpdatedDays(data2, li);
-		});
-	};
+	const createInnerHtmlForArtifacts = function(artifact, ulNode) {
+		try {
+			// console.log("here");
+			// console.log(artifact.versionText);
+			// console.log(artifact);
+			// console.log(JSON.stringify(artifact));
+			let li = createLi(artifact.versionText, artifact.versionNumber);
+			//			paintUpdatedDays(artifact.commitedDate, li)
+			ulNode.appendChild(li);
+
+		} catch (e) {
+			// console.log(artifact.versionText + " : " + e);
+
+			let li = createLi(artifact.versionText, "-");
+			li.className = li.className + " noVersion";
+			ulNode.appendChild(li);
+		}
+	}
 
 	const getVersionTextAndNumber = function(tags) {
 		let versions = sortAndFilterTagVersions(tags);
 		let latestVersion = versions[0];
-		//		console.log(latestVersion);
-
+		if (latestVersion === undefined) {
+			return ["", "", ""];
+		}
 		let versionText = onlyText(latestVersion.name);
 		let versionNumber = onlyNumber(latestVersion.name);
 		let commitUrl = latestVersion.commit.url;
@@ -150,37 +173,30 @@ const init = function() {
 		});
 	};
 
-	const paintUpdatedDays = function(data, li) {
+	const paintUpdatedDays = function(commitedDate, li) {
 		let span = document.createElement("span");
 		li.appendChild(span);
 		span.className = "commitDate";
-		let commitedDays = countDaysFromCommit(data.commit.author.date);
-		span.innerText = commitedDays;
+		span.innerText = commitedDate;
 
-		if (commitedDays < 1) {
+		if (commitedDate < 1) {
 			li.className = li.className + " updatedToday";
 		}
-		else if (commitedDays < 2) {
+		else if (commitedDate < 2) {
 			li.className = li.className + " updatedYesterday";
 		}
-		else if (commitedDays < 7) {
+		else if (commitedDate < 7) {
 			li.className = li.className + " updatedSevenDaysAgo";
 		}
 	};
 
 	const onlyNumberFakeIfNotANumber = function(name) {
 		let number = onlyNumber(name);
-		//		console.log(number);
-		//		console.log("Number of: "+name.split("."));
-
 		if (isNaN(number)) {
 			return '0.0.1';
 		}
 		if (hasVersionWrongFormat(number)) {
-			//			let newNumber = number+".0";
-			//			console.log("NewNumber: "+newNumber);
 			return '0.0.1';
-			//			return newNumber;
 		}
 		return number;
 	};
@@ -209,9 +225,7 @@ const init = function() {
 	};
 
 	const countDaysFromCommit = function(commitDateString) {
-		//		console.log("CommitDate " + commitDateString);
 		let commitDate = new Date(commitDateString);
-		//		console.log(Date.now() - commitDate);
 		return dhm(Date.now() - commitDate);
 	};
 
@@ -230,7 +244,6 @@ const init = function() {
 			d++;
 			h = 0;
 		}
-		//  return [d, pad(h), pad(m)].join(':');
 		return d;
 	};
 
@@ -239,15 +252,13 @@ const init = function() {
 		const repoA = a.name.toUpperCase();
 		const repoB = b.name.toUpperCase();
 
-		let comparison = 0;
-
 		if (repoA > repoB) {
-			comparison = 1;
+			return 1;
 		}
 		else if (repoA < repoB) {
-			comparison = -1;
+			return -1;
 		}
-		return comparison;
+		return 0;
 	};
 
 	const hasVersionWrongFormat = function(number) {
