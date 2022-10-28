@@ -28,7 +28,7 @@ const init = function() {
 	const start = function() {
 		getRepos();
 		//Timer 
-		setInterval(getRepos, 30 * 60 * 1000);
+		setInterval(getRepos, 5 * 60 * 1000);
 	};
 
 	const getRepos = function() {
@@ -55,6 +55,7 @@ const init = function() {
 		if (noRepoListsAdded == 2) {
 			sortAndDisplayRepos(allRepos);
 			noRepoListsAdded = 0;
+			allRepos = new Array(0);
 		}
 	}
 
@@ -97,29 +98,24 @@ const init = function() {
 
 	const getVersionForRepository = function(repo, ulType) {
 		let projectList = document.getElementById(ulType);
-		projectList.innerHTML = '';
 		let url = repo.tags_url;
-		//		console.log(url)
+		
+		let li = createLi();
+		projectList.appendChild(li);
+		
 		$.get(url).done(function(tags) {
-
 			try {
 				let versions = getVersionTextAndNumber(tags);
-
 				let versionText = versions[0];
-				//				console.log(versionText);
 				let versionNumber = versions[1];
 				let commitUrl = versions[2];
-
-				let li = createLi(versionText, versionNumber);
+				populateLi(li, versionText, versionNumber);
 				getLatestUpdate(commitUrl, li)
-				projectList.appendChild(li);
 
 			} catch (e) {
 				console.log(repo.name + " : " + e);
-
-				let li = createLi(repo.name, "-");
+				populateLi(li, repo.name, "-");
 				li.className = li.className + " noVersion";
-				projectList.appendChild(li);
 			}
 		});
 	};
@@ -133,8 +129,6 @@ const init = function() {
 	const getVersionTextAndNumber = function(tags) {
 		let versions = sortAndFilterTagVersions(tags);
 		let latestVersion = versions[0];
-		//		console.log(latestVersion);
-
 		let versionText = onlyText(latestVersion.name);
 		let versionNumber = onlyNumber(latestVersion.name);
 		let commitUrl = latestVersion.commit.url;
@@ -156,8 +150,8 @@ const init = function() {
 		span.className = "commitDate";
 		let commitedDays = countDaysFromCommit(data.commit.author.date);
 		span.innerText = commitedDays;
-
-		if (commitedDays < 1) {
+		console.log("commitedDays: " + commitedDays);
+		if (commitedDays < 8) {
 			li.className = li.className + " updatedToday";
 		}
 		else if (commitedDays < 2) {
@@ -193,10 +187,13 @@ const init = function() {
 		return name.substring(0, name.lastIndexOf("-"));
 	};
 
-	const createLi = function(versionText, versionNumber) {
+	const createLi = function() {
 		let li = document.createElement("li");
 		li.className = "project";
+		return li;
+	};
 
+	const populateLi = function(li, versionText, versionNumber) {
 		let header = document.createElement("h2");
 		li.appendChild(header);
 		header.innerText = versionText;
@@ -205,7 +202,6 @@ const init = function() {
 		li.appendChild(div);
 		div.className = "version";
 		div.innerText = versionNumber;
-		return li;
 	};
 
 	const countDaysFromCommit = function(commitDateString) {
@@ -215,13 +211,13 @@ const init = function() {
 		return dhm(Date.now() - commitDate);
 	};
 
+
 	const dhm = function(t) {
 		var cd = 24 * 60 * 60 * 1000,
 			ch = 60 * 60 * 1000,
 			d = Math.floor(t / cd),
 			h = Math.floor((t - d * cd) / ch),
-			m = Math.round((t - d * cd - h * ch) / 60000),
-			pad = function(n) { return n < 10 ? '0' + n : n; };
+			m = Math.round((t - d * cd - h * ch) / 60000);
 		if (m === 60) {
 			h++;
 			m = 0;
@@ -230,7 +226,6 @@ const init = function() {
 			d++;
 			h = 0;
 		}
-		//  return [d, pad(h), pad(m)].join(':');
 		return d;
 	};
 
