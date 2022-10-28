@@ -16,5 +16,5 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Friday.  If not, see <http://www.gnu.org/licenses/>.
  */
-var yourToken = "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";
+var yourToken = "your token here";
 var repoToken = "token " + yourToken;
