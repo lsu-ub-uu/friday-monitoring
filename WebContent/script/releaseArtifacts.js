@@ -101,11 +101,7 @@ const init = function() {
 	const getVersionForRepository = function(repo, ulType) {
 		let projectList = document.getElementById(ulType);
 		let url = repo.tags_url;
-
-		if (repo.name === "alvin-tocorastorage") {
-			console.log(repo);
-		}
-
+		
 		let li = createLi();
 		projectList.appendChild(li);
 
