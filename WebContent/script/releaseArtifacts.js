@@ -106,10 +106,10 @@ const init = function() {
 		$.get(url).done(function(tags) {
 			try {
 				let versions = getVersionTextAndNumber(tags);
-				let versionText = versions[0];
+//				let versionText = versions[0];
 				let versionNumber = versions[1];
 				let commitUrl = versions[2];
-				populateLi(li, versionText, versionNumber);
+				populateLi(li, repo.name, versionNumber);
 				getLatestUpdate(commitUrl, li)
 
 			} catch (e) {
