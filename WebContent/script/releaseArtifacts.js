@@ -77,13 +77,15 @@ const init = function() {
 		let arrayWithOutFilteredElements = [];
 		arrayIn.forEach(function(element, index, array) {
 			const name = element.name;
-			if (name.includes(filterText)) {
-				//				console.log("Docker"+element.name);
-				arrayWithFilteredElements.push(element);
-			}
-			else {
-				//				console.log("Vanligt"+element.name);
-				arrayWithOutFilteredElements.push(element);
+			if (!element.archived) {
+				if (name.includes(filterText)) {
+					//				console.log("Docker"+element.name);
+					arrayWithFilteredElements.push(element);
+				}
+				else {
+					//				console.log("Vanligt"+element.name);
+					arrayWithOutFilteredElements.push(element);
+				}
 			}
 		});
 		return [arrayWithOutFilteredElements, arrayWithFilteredElements];
@@ -99,14 +101,18 @@ const init = function() {
 	const getVersionForRepository = function(repo, ulType) {
 		let projectList = document.getElementById(ulType);
 		let url = repo.tags_url;
-		
+
+		if (repo.name === "alvin-tocorastorage") {
+			console.log(repo);
+		}
+
 		let li = createLi();
 		projectList.appendChild(li);
-		
+
 		$.get(url).done(function(tags) {
 			try {
 				let versions = getVersionTextAndNumber(tags);
-//				let versionText = versions[0];
+				//				let versionText = versions[0];
 				let versionNumber = versions[1];
 				let commitUrl = versions[2];
 				populateLi(li, repo.name, versionNumber);
