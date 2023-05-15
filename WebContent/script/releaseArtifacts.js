@@ -166,23 +166,22 @@ const init = function() {
 
 	const onlyNumberFakeIfNotANumber = function(name) {
 		let number = onlyNumber(name);
-		//		console.log(number);
 		//		console.log("Number of: "+name.split("."));
 
-		if (isNaN(number)) {
-			return '0.0.1';
-		}
 		if (hasVersionWrongFormat(number)) {
 			//			let newNumber = number+".0";
 			//			console.log("NewNumber: "+newNumber);
 			return '0.0.1';
 			//			return newNumber;
 		}
+//		console.log("Version number of ("+name+")"+number);
 		return number;
 	};
 
 	const onlyNumber = function(name) {
-		return name.substring(name.lastIndexOf("-") + 1, name.length);
+		const regex = /\d+.\d+.\d+/g;
+		return name.slice(name.search(regex)-name.length)
+//		return name.substring(name.lastIndexOf("-") + 1, name.length);
 	};
 
 	const onlyText = function(name) {
