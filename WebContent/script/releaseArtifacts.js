@@ -113,7 +113,6 @@ const init = function() {
 				let commitUrl = versions[2];
 				populateLi(li, repo.name, versionNumber);
 				getLatestUpdate(commitUrl, li)
-
 			} catch (e) {
 				console.log(repo.name + " : " + e);
 				populateLi(li, repo.name, "-");
@@ -167,15 +166,19 @@ const init = function() {
 	const onlyNumberFakeIfNotANumber = function(name) {
 		let number = onlyNumber(name);
 		//		console.log("Number of: "+name.split("."));
-
-		if (hasVersionWrongFormat(number)) {
+		
+		if(null == semver.valid(number)){
+			return '0.0.1';
+		}
+		let semverValidNumber = semver.valid(number)
+		if (hasVersionWrongFormat(semverValidNumber)) {
 			//			let newNumber = number+".0";
 			//			console.log("NewNumber: "+newNumber);
 			return '0.0.1';
 			//			return newNumber;
 		}
 //		console.log("Version number of ("+name+")"+number);
-		return number;
+		return semverValidNumber;
 	};
 
 	const onlyNumber = function(name) {
