@@ -29,7 +29,7 @@ function getRepos() {
 			'Authorization': repoToken
 		}
 	});
-	var repoUrl = "https://api.github.com/orgs/lsu-ub-uu/repos?per_page=500";
+	let repoUrl = "https://api.github.com/orgs/lsu-ub-uu/repos?per_page=500";
 	$.get(repoUrl).done(function(repos) {
 		sortAndDisplayRepos(repos);
 	});
