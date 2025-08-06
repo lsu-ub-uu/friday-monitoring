@@ -40,7 +40,7 @@ function sortAndDisplayRepos(repos) {
 	//	repos.forEach(console.log(element));
 	console.log(repos.sort(compareRepos));
 	
-	var reposSorted = repos.sort(compareRepos);
+	let reposSorted = repos.sort(compareRepos);
 	
 	reposSorted.forEach(function(repo2) {
 		console.log(repo2);
