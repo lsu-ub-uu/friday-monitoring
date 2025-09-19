@@ -28,7 +28,7 @@ const init = function() {
 	const start = function() {
 		getRepos();
 		//Timer 
-		setInterval(getRepos, 5 * 60 * 1000);
+		setInterval(getRepos, 30 * 60 * 1000);
 	};
 
 	const getRepos = function() {
@@ -152,14 +152,17 @@ const init = function() {
 		let commitedDays = countDaysFromCommit(data.commit.author.date);
 		span.innerText = commitedDays;
 		console.log("commitedDays: " + commitedDays);
-		if (commitedDays < 8) {
+		if (commitedDays < 1) {
 			li.className = li.className + " updatedToday";
 		}
-		else if (commitedDays < 2) {
+		else if (commitedDays < 3) {
 			li.className = li.className + " updatedYesterday";
 		}
-		else if (commitedDays < 7) {
+		else if (commitedDays < 8) {
 			li.className = li.className + " updatedSevenDaysAgo";
+		}
+		else if (commitedDays > 365){
+			li.className = li.className + " overAYear";
 		}
 	};
 

@@ -5,10 +5,11 @@
 	--box-title-color: #74bdfd; 
 	--box-background-color: #39393c; 
 	--box-title-no-version-color: #878788; 
-	--box-title-updated-today-color: #239a3b; 
-	--box-title-updated-yesterday-color: #7bc96f;
-	/* 	--box-title-updated-before-yesterday-color: #7bc96f; */ 
-	--box-title-updated-seven-days-ago-color: #c6e48b; 
+	--box-title-updated-today-color: #e07b39; 
+	--box-title-updated-yesterday-color: #d4a53a;
+	--box-title-updated-before-yesterday-color: #7da453; 
+	--box-title-updated-seven-days-ago-color: #37a36c; 
+	--box-title-over-a-year-color: #a75fa0; 
 	--text-version-color: white;
 }
 
@@ -76,13 +77,13 @@ h3 {
 	background-color: var(--box-title-updated-yesterday-color);
 }
 
-.updatedbeforeYesterday h2 {
-	background-color: var(--box-title-updated-before-yesterday-color);
-}
-
 .updatedSevenDaysAgo h2 {
 	background-color: var(--box-title-updated-seven-days-ago-color);
 }
+.overAYear h2 {
+	background-color: var(--box-title-over-a-year-color);
+}
+
 
 .commitDate {
 	font-size: 0.7rem;
