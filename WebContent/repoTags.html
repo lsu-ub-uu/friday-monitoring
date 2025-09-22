@@ -27,20 +27,26 @@
 <script type="text/javascript" src="script/semver.min.js"></script>
 <script type="text/javascript" src="script/repoTagsToken.js"></script>
 <script type="text/javascript" src="script/releaseArtifacts.js"></script>
+<script type="text/javascript" src="script/repoPresenter.js"></script>
 
 <script type="text/javascript">
 	window.onload = init;
 </script>
 </head>
 <body id="body" class="body">
-<!-- <h1>Project tags</h1> -->
-<!-- 	<p> -->
-<!-- 		Latest tag: <span id="result"></span> -->
-<!-- 	</p> -->
-	<h3>Artefakter</h3>
-	<ul id=projectList class="projectList"></ul>
-	<h3>Dockers</h3>
-	<ul id=dockerList class="projectList"></ul>
+    <div id="refreshCounter"></div>
+    <div style="margin-bottom: 1em;">
+        <label for="sortMode">Sort by:</label>
+        <select id="sortMode">
+            <option value="nameAsc">Name (A-Z)</option>
+            <option value="nameDesc">Name (Z-A)</option>
+            <option value="ageAsc">How old (newest first)</option>
+            <option value="ageDesc">How old (oldest first)</option>
+        </select>
+    </div>
+    <h3>Artefakter</h3>
+    <ul id=projectList class="projectList"></ul>
+    <h3>Dockers</h3>
+    <ul id=dockerList class="projectList"></ul>
 </body>
 </html>
-
