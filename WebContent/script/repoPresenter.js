@@ -90,7 +90,7 @@ class RepoPresenter {
         li.appendChild(span);
         span.className = "commitDate";
         const days = this.countDaysFromCommit(data.commit.author.date);
-        span.innerText = days;
+        span.innerText = this.formatDaysOrTime(days, data.commit.author.date);
         if (days < 1) {
             li.className += " updatedToday";
         } else if (days < 3) {
@@ -100,6 +100,34 @@ class RepoPresenter {
         } else if (days > 365) {
             li.className += " overAYear";
         }
+    }
+
+    formatDaysOrTime(days, commitDateString) {
+        if (days < 1) {
+            // Show hours and minutes
+            const commitDate = new Date(commitDateString);
+            const now = new Date();
+            let diffMs = now - commitDate;
+            if (diffMs < 0) diffMs = 0;
+            const hours = Math.floor(diffMs / (1000 * 60 * 60));
+            const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+            return `${hours} hour${hours !== 1 ? 's' : ''}, ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+        }
+        if (days < 365) {
+            return `${days} days`;
+        }
+        const years = Math.floor(days / 365);
+        const remDays = days % 365;
+        return `${years} year${years > 1 ? 's' : ''}${remDays > 0 ? ", " + remDays + " days" : ""}`;
+    }
+
+    formatDays(days) {
+        if (days < 365) {
+            return `${days} days`;
+        }
+        const years = Math.floor(days / 365);
+        const remDays = days % 365;
+        return `${years} year${years > 1 ? 's' : ''}${remDays > 0 ? ", " + remDays + " days" : ""}`;
     }
 
     countDaysFromCommit(commitDateString) {
