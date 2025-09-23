@@ -24,7 +24,7 @@ const init = function() {
     let currentSortMode = "nameAsc";
 
     // Counter logic
-    const REFRESH_INTERVAL_SEC = 1800; // 30 minutes
+    const REFRESH_INTERVAL_SEC = 900; // 15 minutes
     let counter = REFRESH_INTERVAL_SEC;
     let counterIntervalId = null;
     const counterElem = document.getElementById("refreshCounter");
@@ -125,7 +125,6 @@ const init = function() {
                 presenter.populateLi(li, repo.name, versionNumber);
                 fetchLatestUpdate(commitUrl, li, repo);
             } catch (e) {
-                console.log(repo.name + " : " + e);
                 presenter.populateLi(li, repo.name, "-");
                 li.className += " noVersion";
             }

@@ -34,15 +34,17 @@
 </script>
 </head>
 <body id="body" class="body">
-    <div id="refreshCounter"></div>
-    <div style="margin-bottom: 1em;">
-        <label for="sortMode">Sort by:</label>
-        <select id="sortMode">
-            <option value="nameAsc">Name (A-Z)</option>
-            <option value="nameDesc">Name (Z-A)</option>
-            <option value="ageAsc">How old (newest first)</option>
-            <option value="ageDesc">How old (oldest first)</option>
-        </select>
+    <div class="header-bar">
+        <div id="refreshCounter"></div>
+        <div>
+            <label for="sortMode">Sort by:</label>
+            <select id="sortMode">
+                <option value="nameAsc">Name (A-Z)</option>
+                <option value="nameDesc">Name (Z-A)</option>
+                <option value="ageAsc">How old (newest first)</option>
+                <option value="ageDesc">How old (oldest first)</option>
+            </select>
+        </div>
     </div>
     <h3>Artefakter</h3>
     <ul id=projectList class="projectList"></ul>
